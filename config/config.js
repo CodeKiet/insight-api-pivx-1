@@ -30,9 +30,9 @@ if (process.env.INSIGHT_NETWORK === 'livenet') {
 } else {
   env = 'testnet';
   db = home + '/testnet';
-  port = '3001';
-  b_port = '19998';
-  p2p_port = '19999';
+  port = '8015';
+  b_port = '51475';
+  p2p_port = '51475';
 }
 port = parseInt(process.env.INSIGHT_PORT) || port;
 
@@ -57,11 +57,11 @@ var isWin = /^win/.test(process.platform);
 var isMac = /^darwin/.test(process.platform);
 var isLinux = /^linux/.test(process.platform);
 if (!dataDir) {
-  if (isWin) dataDir = '%APPDATA%\\Dash\\';
-  if (isMac) dataDir = process.env.HOME + '/Library/Application Support/Dash/';
-  if (isLinux) dataDir = process.env.HOME + '/.dash/';
+  if (isWin) dataDir = '%APPDATA%\\Pivx\\';
+  if (isMac) dataDir = process.env.HOME + '/Library/Application Support/Pivx/';
+  if (isLinux) dataDir = process.env.HOME + '/.pivx/';
 }
-dataDir += network === 'testnet' ? 'testnet3' : '';
+dataDir += network === 'testnet' ? 'testnet4' : '';
 
 var safeConfirmations = process.env.INSIGHT_SAFE_CONFIRMATIONS || 6;
 var ignoreCache = process.env.INSIGHT_IGNORE_CACHE || 0;

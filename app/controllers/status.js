@@ -13,6 +13,7 @@ var Status  = require('../models/Status'),
 exports.show = function(req, res) {
   
   var option = req.query.q;
+  console.log(option);
   var statusObject = new Status();
 
   var returnJsonp = function (err) {

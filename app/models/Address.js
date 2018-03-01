@@ -30,7 +30,9 @@ function Address(addrStr) {
   this.unspent = [];
 
   var a = new BitcoreAddress(addrStr);
-  a.validate();
+  console.log(a);
+  // HAX, this shouldn't ever exist in production
+  // a.validate();
   this.addrStr = addrStr;
 
   Object.defineProperty(this, 'totalSent', {

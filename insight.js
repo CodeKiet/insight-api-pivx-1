@@ -28,7 +28,7 @@ console.log(
 /___/_/ /_/____/_/\\__, /_/ /_/\\__/  /_/  |_/ .___/_/   \n\
                  /____/                   /_/           \n\
 \n\t\t\t\t\t\tv%s\n', config.version);
-program.on('--help', function() {
+program.on('--help', function () {
   logger.info('\n# Configuration:\n\
 \tINSIGHT_NETWORK (Network): %s\n\
 \tINSIGHT_DB (Database Path):  %s\n\
@@ -78,8 +78,8 @@ if (config.enableHTTPS) {
 
 // Bootstrap models
 var models_path = __dirname + '/app/models';
-var walk = function(path) {
-  fs.readdirSync(path).forEach(function(file) {
+var walk = function (path) {
+  fs.readdirSync(path).forEach(function (file) {
     var newPath = path + '/' + file;
     var stat = fs.statSync(newPath);
     if (stat.isFile()) {
@@ -100,7 +100,10 @@ var peerSync = new PeerSync({
 });
 
 if (!config.disableP2pSync) {
+  console.log('doing peer sync');
   peerSync.run();
+} else {
+  console.log('not doing peer sync');
 }
 
 // historic_sync process
@@ -109,18 +112,25 @@ var historicSync = new HistoricSync({
 });
 peerSync.historicSync = historicSync;
 
-if (!config.disableHistoricSync) {
-  historicSync.start({}, function(err) {
+function getSynced() {
+  historicSync.start({}, function (err) {
     if (err) {
       var txt = 'ABORTED with error: ' + err.message;
       console.log('[historic_sync] ' + txt);
     }
     if (peerSync) peerSync.allowReorgs = true;
   });
+}
+
+if (!config.disableHistoricSync) {
+  // Run the sync on initial startup to catch up for any time the server
+  // was offline
+  getSynced()
+  // Force the historic sync to run every minute to match the interval
+  // at which new blocks are added to the chain
+  setInterval(getSynced, 60000);
 } else
-if (peerSync) peerSync.allowReorgs = true;
-
-
+  if (peerSync) peerSync.allowReorgs = true;
 
 // socket.io
 var ios = require('socket.io')(server, config);
@@ -145,7 +155,7 @@ require('./config/routes')(expressApp);
 
 
 //Start the app by listening on <port>
-server.listen(config.port, function() {
+server.listen(config.port, function () {
   logger.info('insight server listening on port %d in %s mode', server.address().port, process.env.NODE_ENV);
 });
 
