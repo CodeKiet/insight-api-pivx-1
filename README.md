@@ -1,7 +1,10 @@
 
+# NOTE:
+This version of Insights has been modified to work with pivxd and requires a running instance of pivxd to connect to. This does not necessarily have to be local but if it is not you need to specify the BITCOIND_HOST environment variable as such. It also runs on port 8015 by default, should you wish the change the running port you may do so in config/config.js on the 'port' variable for which network you are using. 
+
 # *insight API*
 
-*insight API* is an open-source bitcoin blockchain REST
+*insight API* is an open-source bitcoin[PIVX] blockchain REST
 and websocket API. Insight API runs in NodeJS and uses LevelDB for storage.
 
 This is a backend-only service. If you're looking for the web frontend application,
@@ -14,9 +17,9 @@ A blockchain explorer front-end has been developed on top of *Insight API*. It c
 be downloaded at [Github Insight Repository](https://github.com/bitpay/insight).
 
 ## Warning
-  Insight file sync does not work with **bitcoind**  v0.10 
-  In order to use Insigtht you must set the environment variable INSIGHT_FORCE_RPC_SYNC = 1  
-  We are working on `bitcore-node` to replace Insight-api. Check `bitcore-node` on  [github](https://github.com/bitpay/bitcore-node).
+  Insight file sync does not work with **pivxd** 
+  In order to use Insight you must set the environment variable INSIGHT_FORCE_RPC_SYNC = 1 
+  Since file sync does not work the RPC sync is run on a timed interval every 60000 ms. This matches the interval at which new blocks are added to the network but it does leave the possibility of being up to 59 seconds behind the blockchain depending on what time the server was started at. 
 
 ## Prerequisites
 
@@ -43,7 +46,7 @@ bitcoind must be running and must have finished downloading the blockchain **bef
 
   To install Insight API, clone the main repository:
 
-    $ git clone https://github.com/bitpay/insight-api && cd insight-api
+    $ git clone https://github.com/genitrust/UdjinM6-insight-api-pivx && cd UdjinM6-insight-api-pivx
 
   Install dependencies:
 
@@ -55,7 +58,7 @@ bitcoind must be running and must have finished downloading the blockchain **bef
 
   Then open a browser and go to:
 
-    http://localhost:3001
+    http://localhost:8015
 
   Please note that the app will need to sync its internal database
   with the blockchain state, which may take some time. You can check
@@ -67,13 +70,13 @@ bitcoind must be running and must have finished downloading the blockchain **bef
 All configuration is specified in the [config](config/) folder, particularly the [config.js](config/config.js) file. There you can specify your application name and database name. Certain configuration values are pulled from environment variables if they are defined:
 
 ```
-BITCOIND_HOST         # RPC bitcoind host
-BITCOIND_PORT         # RPC bitcoind Port
-BITCOIND_P2P_HOST     # P2P bitcoind Host (will default to BITCOIND_HOST, if specified)
-BITCOIND_P2P_PORT     # P2P bitcoind Port
+BITCOIND_HOST         # RPC pivxd host
+BITCOIND_PORT         # RPC pivxd Port
+BITCOIND_P2P_HOST     # P2P pivxd Host (will default to BITCOIND_HOST, if specified)
+BITCOIND_P2P_PORT     # P2P pivxd Port
 BITCOIND_USER         # RPC username
 BITCOIND_PASS         # RPC password
-BITCOIND_DATADIR      # bitcoind datadir. 'testnet3' will be appended automatically if testnet is used. NEED to finish with '/'. e.g: `/vol/data/`
+BITCOIND_DATADIR      # pivxd datadir. 'testnet4' will be appended automatically if testnet is used. NEED to finish with '/'. e.g: `/vol/data/`
 INSIGHT_NETWORK [= 'livenet' | 'testnet']
 INSIGHT_PORT          # insight api port
 INSIGHT_DB            # Path where to store insight's internal DB. (defaults to $HOME/.insight)
@@ -92,6 +95,12 @@ Make sure that bitcoind is configured to [accept incoming connections using 'rpc
 
 In case the network is changed (testnet to livenet or vice versa) levelDB database needs to be deleted. This can be performed running:
 ```util/sync.js -D``` and waiting for *insight* to synchronize again.  Once the database is deleted, the sync.js process can be safely interrupted (CTRL+C) and continued from the synchronization process embedded in main app.
+
+## EXAMPLE:
+
+  To run the server in livenet mode without modifying the config options:
+
+  $ INSIGHT_NETWORK=livenet INSIGHT_FORCE_RPC_SYNC=1 BITCOIND_USER=username BITCOIND_PASS=password node insight.js
 
 ## Synchronization
 
