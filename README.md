@@ -23,17 +23,17 @@ be downloaded at [Github Insight Repository](https://github.com/bitpay/insight).
 
 ## Prerequisites
 
-* **bitcoind** - Download and Install [Bitcoin](http://bitcoin.org/en/download)
+* **pivxd** - Download and Install [PIVX](https://pivx.org/wallet/)
 
-*insight API* needs a *trusted* bitcoind node to run. *insight API* will connect to the node
-through the RPC API, bitcoin peer-to-peer protocol, and will even read its raw block .dat files for syncing.
+*insight API* needs a *trusted* pivxd node to run. *insight API* will connect to the node
+through the RPC API, pivx peer-to-peer protocol, and will even read its raw block .dat files for syncing.
 
-Configure bitcoind to listen to RPC calls and set `txindex` to true.
-The easiest way to do this is by copying `./etc/bitcoind/bitcoin.conf` to your
-bitcoin data directory (usually `~/.bitcoin` on Linux, `%appdata%\Bitcoin\` on Windows,
-or `~/Library/Application Support/Bitcoin` on Mac OS X).
+Configure pivxd to listen to RPC calls and set `txindex` to true.
+The easiest way to do this is by copying `./etc/pivxd/pivx.conf` to your
+bitcoin data directory (usually `~/.pivx` on Linux, `%appdata%\Pivx\` on Windows,
+or `~/Library/Application Support/Pivx` on Mac OS X).
 
-bitcoind must be running and must have finished downloading the blockchain **before** running *insight API*.
+pivxd must be running and must have finished downloading the blockchain **before** running *insight API*.
 
 
 * **Node.js v0.10.x** - Download and Install [Node.js](http://www.nodejs.org/download/).
@@ -46,7 +46,7 @@ bitcoind must be running and must have finished downloading the blockchain **bef
 
   To install Insight API, clone the main repository:
 
-    $ git clone https://github.com/genitrust/UdjinM6-insight-api-pivx && cd UdjinM6-insight-api-pivx
+    $ git clone https://github.com/genitrust/insight-api-pivx && cd insight-api-pivx
 
   Install dependencies:
 
@@ -62,7 +62,7 @@ bitcoind must be running and must have finished downloading the blockchain **bef
 
   Please note that the app will need to sync its internal database
   with the blockchain state, which may take some time. You can check
-  sync progress at http://localhost:3001/api/sync.
+  sync progress at http://localhost:8015/api/sync.
 
 
 ## Configuration
